@@ -1,0 +1,61 @@
+﻿@model IQueryable<IdentitySystem.Models.AppUser>
+@{
+    ViewData["Title"] = "All Users";
+}
+
+<h1>All Users</h1>
+
+<a asp-action="Register" class="btn btn-primary mb-4" asp-controller="Account">Add new user</a>
+
+@if (Model.Any())
+{
+    foreach (var user in Model)
+    {
+        <div class="card mb-4">
+            <div class="card-header">
+                User ID : @user.Id
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">@user.UserName</h5>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="m-3">
+                        <a asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
+                    </div>
+                    <div class="m-3">
+                        <form method="post" asp-action="DeleteUser" asp-route-id="@user.Id">
+                            <span id="confimDeleteSpan_@user.Id" style="display:none">
+                                <span>Are You Sure You Want to Delete this User ?</span>
+                                <button type="submit" class="btn btn-danger">Yes</button>
+                                <a onclick="confirmDelete('@user.Id', false)" class="btn btn-primary">NO</a>
+                            </span>
+
+                            <span id="deleteSpan_@user.Id">
+                                <a href="#"
+                                   onclick="confirmDelete('@user.Id', true)"
+                                   class="btn btn-danger">Delete</a>
+                            </span>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="card mb-4">
+        <div class="card-header">
+            No User Create Yet.
+        </div>
+        <div class="card-body">
+            <h5 class="card-title"> Use the above button to Register new user</h5>
+        </div>
+
+    </div>
+}
+
+@section Scripts{
+    <script src="~/js/confirmMsg.js"></script>
+}
